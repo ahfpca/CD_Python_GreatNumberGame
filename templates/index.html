@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <title>Great Number Game</title>
+    <style>
+        form {
+            width: 10%;
+            margin: 0 auto;
+            float: none;
+        }
+
+        .boxRed {
+            width: 20%;
+            height: 150px;
+            border: 2px black solid;
+            color: white;
+            background-color: red;
+        }
+
+        .boxGreen {
+            width: 20%;
+            height: 150px;
+            border: 2px black solid;
+            color: white;
+            background-color: green;
+        }
+
+
+        .message {
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            font-size: 2em;
+        }
+
+        p {
+            text-align:center; 
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <main role="main">
+     
+    <section class="jumbotron text-center">
+        <div class="container">
+            <h1 class="jumbotron-heading">Welcome to the Great Number Game!</h1>
+        </div>
+    </section>
+
+    <div class="container text-center">
+        <h4>I am thinking of a number between 1 and 100<br>Take a guess!</h4>
+        <br>
+        <br>
+        {% set message = "Too Low!" %}
+        {% if session["guess"] > session["number"]: %}
+            {% set message = "Too High!" %}
+        {% endif %}
+        {% if session["guess"] == session["number"]: %}
+            {% set message = "You Won! {} was the number.".format(session["number"]) %}
+        {% endif %}
+        {% if session["count"] > 0 and session["guess"] != session["number"]: %}
+        <div class="row">
+            <div class="col-5"></div>
+            <div class="col-2 boxRed">
+                <p class="message">{{ message }}</p>
+            </div>
+            <div class="col-5"></div>
+        </div>
+        {% endif %}
+        {% if session["count"] > 0 and session["guess"] == session["number"]: %}
+        <div class="row">
+            <div class="col-5"></div>
+            <div class="col-2 boxGreen">
+                <p class="message">{{ message }}</p>
+                <button type="button" class="col-10" onclick="window.location.href='/reset'">Play again!</button>
+            </div>
+            <div class="col-5"></div>
+        </div>
+        {% else: %}
+        <br>
+        <form action="/check" method="post">
+            <input type="text" class="form-control" name="guessedNum" placeholder="" value="">
+            <br>
+            <button class="btn btn-primary btn-block" type="submit">Submit</button>
+        </form>
+        {% endif %}
+    </div>
+
+    
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.3.1.slim.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+</body>
+</html>
